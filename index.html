@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Will You Be My Valentine?</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        
+        body {
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(-45deg, #e6c6ff, #d8b4fe, #c084fc, #a855f7);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            padding: 10px;
+            transition: background 1s ease;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            text-align: center;
+            padding: 40px 35px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(255, 240, 245, 0.95));
+            border-radius: 35px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+            max-width: 650px;
+            width: 98%;
+            z-index: 10;
+            position: relative;
+            transition: all 0.5s ease;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .valentine-question {
+            font-size: clamp(2.2rem, 5vw, 2.8rem);
+            margin-bottom: 40px;
+            font-weight: 800;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            line-height: 1.3;
+            padding: 0 20px;
+            animation: textColorShift 8s infinite linear;
+            letter-spacing: 0.5px;
+        }
+        
+        @keyframes textColorShift {
+            0% { color: #a855f7; }
+            20% { color: #c084fc; }
+            40% { color: #d8b4fe; }
+            60% { color: #ec4899; }
+            80% { color: #f472b6; }
+            100% { color: #a855f7; }
+        }
+        
+        .buttons-wrapper {
+            position: relative;
+            width: 100%;
+            min-height: 150px;
+            margin-top: 20px;
+        }
+        
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        button {
+            padding: 14px 30px;
+            font-size: clamp(1.1rem, 4vw, 1.4rem);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-weight: 700;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            width: 170px;
+            min-height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-appearance: none;
+            user-select: none;
+            margin: 0 auto;
+        }
+        
+        button:active {
+            transform: scale(0.97);
+        }
+        
+        #yes-btn {
+            background: linear-gradient(135deg, #a855f7, #c084fc);
+            color: white !important;
+            order: 1;
+            z-index: 10;
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+        
+        #yes-btn:active {
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+        }
+        
+        .no-btn {
+            background: linear-gradient(135deg, #757575, #9e9e9e);
+            color: white;
+            order: 2;
+            position: absolute;
+            z-index: 5;
+            transition: left 0.5s ease, top 0.5s ease;
+            pointer-events: auto;
+        }
+        
+        .no-btn:active {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Balloons styling */
+        .balloon {
+            position: fixed;
+            z-index: 2;
+            pointer-events: none;
+            animation: floatUp 20s linear infinite;
+            opacity: 0;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+        
+        .balloon-emoji {
+            font-size: 2.8rem;
+            display: block;
+        }
+        
+        .balloon-string {
+            display: block;
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to bottom, #888, #aaa);
+            margin: 0 auto;
+            position: relative;
+            top: -5px;
+        }
+        
+        /* Sunflowers styling */
+        .sunflower {
+            position: fixed;
+            z-index: 3;
+            pointer-events: none;
+            animation: sunflowerFloat 25s linear infinite;
+            opacity: 0;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+        }
+        
+        .sunflower-emoji {
+            font-size: 3rem;
+            display: block;
+            animation: sunflowerRotate 8s linear infinite;
+        }
+        
+        @keyframes sunflowerFloat {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.9;
+            }
+            90% {
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(-100px) translateX(var(--drift)) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes sunflowerRotate {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+            50% {
+                transform: rotate(180deg) scale(1.1);
+            }
+            100% {
+                transform: rotate(360deg) scale(1);
+            }
+        }
+        
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            5% {
+                opacity: 0.8;
+            }
+            95% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) translateX(var(--drift)) rotate(var(--rotate));
+                opacity: 0;
+            }
+        }
+        
+        /* Success page styles */
+        .success-container {
+            display: none;
+            text-align: center;
+            padding: 45px 35px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(255, 240, 245, 0.95));
+            border-radius: 35px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+            max-width: 650px;
+            width: 98%;
+            z-index: 10;
+            position: relative;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        .success-title {
+            font-size: clamp(2.5rem, 6vw, 3.2rem);
+            margin-bottom: 30px;
+            font-weight: 900;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            line-height: 1.2;
+            animation: textColorShift 6s infinite linear;
+            letter-spacing: 0.5px;
+        }
+        
+        .success-message {
+            font-size: clamp(1.6rem, 4vw, 2rem);
+            margin-bottom: 45px;
+            line-height: 1.4;
+            padding: 0 20px;
+            animation: textColorShift 7s infinite linear;
+        }
+        
+        .hearts-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 35px;
+            flex-wrap: wrap;
+        }
+        
+        .heart {
+            font-size: clamp(2.8rem, 6vw, 3.5rem);
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
+        }
+        
+        .heart:nth-child(1) {
+            animation-delay: 0s;
+            animation: textColorShift 8s infinite linear, heartbeat 1.5s infinite;
+        }
+        
+        .heart:nth-child(2) {
+            animation-delay: 0.2s;
+            animation: textColorShift 7s infinite linear, heartbeat 1.5s infinite;
+        }
+        
+        .heart:nth-child(3) {
+            animation-delay: 0.4s;
+            animation: textColorShift 6s infinite linear, heartbeat 1.5s infinite;
+        }
+        
+        .heart:nth-child(4) {
+            animation-delay: 0.6s;
+            animation: textColorShift 5s infinite linear, heartbeat 1.5s infinite;
+        }
+        
+        .heart:nth-child(5) {
+            animation-delay: 0.8s;
+            animation: textColorShift 4s infinite linear, heartbeat 1.5s infinite;
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Teleport effect */
+        .teleport {
+            animation: teleport 0.4s ease;
+        }
+        
+        @keyframes teleport {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.1) rotate(180deg); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        /* Music player controls */
+        .music-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 50px;
+            padding: 12px 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(168, 85, 247, 0.3);
+        }
+        
+        .music-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #a855f7, #c084fc);
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+        }
+        
+        .music-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6);
+        }
+        
+        .music-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            max-width: 200px;
+        }
+        
+        .music-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #a855f7;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .music-artist {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .volume-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .volume-slider {
+            width: 80px;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .volume-fill {
+            position: absolute;
+            height: 100%;
+            width: 70%;
+            background: linear-gradient(to right, #a855f7, #c084fc);
+            border-radius: 10px;
+        }
+        
+        .volume-knob {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: #a855f7;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: grab;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .volume-icon {
+            color: #a855f7;
+            font-size: 1.1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .music-controls {
+                bottom: 15px;
+                right: 15px;
+                padding: 10px 12px;
+            }
+            
+            .music-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+            
+            .music-info {
+                max-width: 150px;
+            }
+            
+            .music-title {
+                font-size: 0.85rem;
+            }
+            
+            .music-artist {
+                font-size: 0.75rem;
+            }
+            
+            .volume-slider {
+                width: 70px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .music-controls {
+                flex-direction: column;
+                gap: 8px;
+                padding: 10px;
+                border-radius: 25px;
+            }
+            
+            .music-info {
+                display: none;
+            }
+            
+            .volume-controls {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .volume-slider {
+                width: 100px;
+            }
+        }
+        
+        /* Mobile-specific adjustments */
+        @media (max-width: 768px) {
+            .container, .success-container {
+                padding: 35px 25px;
+                border-radius: 30px;
+            }
+            
+            .valentine-question {
+                font-size: 1.9rem;
+                margin-bottom: 35px;
+            }
+            
+            .buttons-wrapper {
+                min-height: 140px;
+            }
+            
+            button {
+                padding: 12px 25px;
+                width: 160px;
+                min-height: 52px;
+                font-size: 1.2rem;
+            }
+            
+            .success-title {
+                font-size: 2.3rem;
+            }
+            
+            .success-message {
+                font-size: 1.7rem;
+            }
+            
+            .heart {
+                font-size: 2.8rem;
+            }
+            
+            .balloon-emoji, .sunflower-emoji {
+                font-size: 2rem;
+            }
+            
+            .balloon-string {
+                height: 30px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container, .success-container {
+                padding: 30px 20px;
+                border-radius: 25px;
+            }
+            
+            .valentine-question {
+                font-size: 1.7rem;
+                margin-bottom: 30px;
+            }
+            
+            button {
+                padding: 11px 22px;
+                width: 150px;
+                min-height: 50px;
+                font-size: 1.1rem;
+            }
+            
+            .success-title {
+                font-size: 2rem;
+            }
+            
+            .success-message {
+                font-size: 1.5rem;
+            }
+            
+            .heart {
+                font-size: 2.5rem;
+            }
+            
+            .balloon-emoji, .sunflower-emoji {
+                font-size: 1.8rem;
+            }
+            
+            .balloon-string {
+                height: 25px;
+            }
+        }
+        
+        /* Extra small phones */
+        @media (max-width: 350px) {
+            .valentine-question {
+                font-size: 1.5rem;
+            }
+            
+            button {
+                padding: 10px 20px;
+                width: 140px;
+                min-height: 48px;
+                font-size: 1rem;
+            }
+            
+            .success-title {
+                font-size: 1.8rem;
+            }
+            
+            .success-message {
+                font-size: 1.3rem;
+            }
+            
+            .balloon-emoji, .sunflower-emoji {
+                font-size: 1.6rem;
+            }
+            
+            .balloon-string {
+                height: 20px;
+            }
+        }
+        
+        /* Landscape mode adjustments */
+        @media (max-height: 600px) and (orientation: landscape) {
+            body {
+                align-items: flex-start;
+                padding-top: 5px;
+                overflow-y: auto;
+            }
+            
+            .container, .success-container {
+                margin: 5px 0;
+                padding: 20px 25px;
+            }
+            
+            .buttons-container {
+                flex-direction: row;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            button {
+                width: 150px;
+                padding: 10px 20px;
+            }
+            
+            .buttons-wrapper {
+                min-height: 100px;
+            }
+            
+            .valentine-question {
+                margin-bottom: 20px;
+                font-size: 1.6rem;
+            }
+            
+            .no-btn {
+                position: relative !important;
+                left: auto !important;
+                top: auto !important;
+                margin-top: 0;
+            }
+            
+            .music-controls {
+                bottom: 10px;
+                right: 10px;
+                padding: 8px 10px;
+            }
+        }
+        
+        /* Prevent text selection on buttons */
+        .no-select {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* Button pulse effect for yes button */
+        @keyframes pulse {
+            0% { box-shadow: 0 6px 18px rgba(168, 85, 247, 0.4); }
+            50% { box-shadow: 0 6px 22px rgba(168, 85, 247, 0.7); }
+            100% { box-shadow: 0 6px 18px rgba(168, 85, 247, 0.4); }
+        }
+        
+        /* Subtle container animation */
+        @keyframes gentleFloat {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .container {
+            animation: gentleFloat 10s ease-in-out infinite;
+        }
+        
+        .success-container {
+            animation: gentleFloat 10s ease-in-out infinite;
+        }
+        
+        /* Background color shift animation */
+        @keyframes colorShift {
+            0% { filter: hue-rotate(0deg); }
+            25% { filter: hue-rotate(40deg); }
+            50% { filter: hue-rotate(0deg); }
+            75% { filter: hue-rotate(-40deg); }
+            100% { filter: hue-rotate(0deg); }
+        }
+        
+        .color-shift {
+            animation: colorShift 20s infinite linear;
+        }
+        
+        /* Sunflower colors */
+        .sunflower-color-1 { color: #FFD700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+        .sunflower-color-2 { color: #FFB347; text-shadow: 0 0 10px rgba(255, 179, 71, 0.5); }
+        .sunflower-color-3 { color: #FF8C00; text-shadow: 0 0 10px rgba(255, 140, 0, 0.5); }
+        .sunflower-color-4 { color: #FF6347; text-shadow: 0 0 10px rgba(255, 99, 71, 0.5); }
+        .sunflower-color-5 { color: #FF4500; text-shadow: 0 0 10px rgba(255, 69, 0, 0.5); }
+        
+        /* Balloon colors */
+        .balloon-color-1 { color: #FF6B8B; }
+        .balloon-color-2 { color: #FF8E53; }
+        .balloon-color-3 { color: #FFD166; }
+        .balloon-color-4 { color: #06D6A0; }
+        .balloon-color-5 { color: #118AB2; }
+    </style>
+</head>
+<body>
+    <!-- Background Music -->
+    <audio id="background-music" loop preload="auto">
+        <!-- Replace with your actual music file path -->
+        <source src="Ricky_Montgomery_-_Line_Without_a_Hook_Lyrics_256kbps.webm" type="audio/webm">
+        <source src="Ricky_Montgomery_-_Line_Without_a_Hook_Lyrics_256kbps.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <!-- Music Controls -->
+    <div class="music-controls">
+        <div class="music-info">
+            <div class="music-title">Line Without a Hook</div>
+            <div class="music-artist">Ricky Montgomery</div>
+        </div>
+        <button class="music-btn" id="play-pause-btn">
+            <i class="fas fa-play"></i>
+        </button>
+        <div class="volume-controls">
+            <i class="fas fa-volume-up volume-icon"></i>
+            <div class="volume-slider" id="volume-slider">
+                <div class="volume-fill" id="volume-fill"></div>
+                <div class="volume-knob" id="volume-knob"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Valentine Question Container -->
+    <div class="container" id="question-container">
+        <h1 class="valentine-question">Will you be my Valentine, Debosmita? 💜</h1>
+        <div class="buttons-wrapper">
+            <div class="buttons-container" id="buttons-container">
+                <button id="yes-btn">Yes 💜</button>
+                <button id="no-btn" class="no-btn no-select">No</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success Container -->
+    <div class="success-container" id="success-container">
+        <h1 class="success-title">Yay! I love you! 💜</h1>
+        <p class="success-message">You made me the happiest! 💜</p>
+        <div class="hearts-container">
+            <div class="heart">💜</div>
+            <div class="heart">💖</div>
+            <div class="heart">💗</div>
+            <div class="heart">💓</div>
+            <div class="heart">💘</div>
+        </div>
+    </div>
+
+    <script>
+        // Background color shift function
+        function startColorShift() {
+            document.body.classList.add('color-shift');
+            
+            // Also change gradient colors gradually
+            const colors = [
+                ['#e6c6ff', '#d8b4fe', '#c084fc', '#a855f7'],
+                ['#f0e6ff', '#e6ccff', '#d9b8ff', '#c084fc'],
+                ['#f5f0ff', '#e9d8fd', '#d6bcfa', '#b794f4'],
+                ['#e6e6ff', '#d6d4ff', '#c7d2fe', '#a5b4fc']
+            ];
+            
+            let colorIndex = 0;
+            
+            // Change gradient colors every 10 seconds
+            setInterval(() => {
+                colorIndex = (colorIndex + 1) % colors.length;
+                const newColors = colors[colorIndex];
+                
+                // Smooth transition between gradients
+                document.body.style.background = `linear-gradient(-45deg, ${newColors[0]}, ${newColors[1]}, ${newColors[2]}, ${newColors[3]})`;
+                document.body.style.transition = 'background 3s ease';
+                
+                // After transition, reset for next cycle
+                setTimeout(() => {
+                    document.body.style.transition = 'none';
+                }, 3000);
+            }, 10000);
+        }
+        
+        // Global variable to track current animation
+        let currentBalloons = [];
+        let isSunflowerMode = false;
+        
+        // Create 101 floating balloons
+        function create101Balloons() {
+            const balloonEmojis = ['🎈'];
+            const balloonColors = [
+                'balloon-color-1', 'balloon-color-2', 'balloon-color-3', 
+                'balloon-color-4', 'balloon-color-5'
+            ];
+            
+            // Clear any existing balloons
+            clearAllBalloons();
+            
+            // Create 101 balloons
+            for (let i = 0; i < 101; i++) {
+                setTimeout(() => {
+                    const balloon = createBalloon(i, balloonEmojis, balloonColors);
+                    currentBalloons.push(balloon);
+                }, i * 80); // Stagger creation for performance
+            }
+            
+            isSunflowerMode = false;
+        }
+        
+        // Create 101 floating sunflowers
+        function create101Sunflowers() {
+            const sunflowerEmojis = ['🌻'];
+            const sunflowerColors = [
+                'sunflower-color-1', 'sunflower-color-2', 'sunflower-color-3', 
+                'sunflower-color-4', 'sunflower-color-5'
+            ];
+            
+            // Clear any existing balloons/sunflowers
+            clearAllBalloons();
+            
+            // Create 101 sunflowers
+            for (let i = 0; i < 101; i++) {
+                setTimeout(() => {
+                    const sunflower = createSunflower(i, sunflowerEmojis, sunflowerColors);
+                    currentBalloons.push(sunflower);
+                }, i * 60); // Faster creation for celebration
+            }
+            
+            isSunflowerMode = true;
+        }
+        
+        // Create single balloon with string
+        function createBalloon(index, balloonEmojis, balloonColors) {
+            const balloon = document.createElement('div');
+            balloon.classList.add('balloon');
+            
+            // Random color class
+            const colorClass = balloonColors[Math.floor(Math.random() * balloonColors.length)];
+            
+            // Create balloon with string
+            balloon.innerHTML = `
+                <div class="balloon-emoji ${colorClass}">${balloonEmojis[0]}</div>
+                <div class="balloon-string"></div>
+            `;
+            
+            // Random horizontal position
+            const leftPosition = Math.random() * 100;
+            balloon.style.left = `${leftPosition}%`;
+            
+            // Random drift amount for side-to-side movement
+            const driftAmount = (Math.random() - 0.5) * 100;
+            balloon.style.setProperty('--drift', `${driftAmount}px`);
+            
+            // Random rotation
+            const rotation = (Math.random() - 0.5) * 30;
+            balloon.style.setProperty('--rotate', `${rotation}deg`);
+            
+            // Random delay for staggered animation
+            const delay = Math.random() * 15;
+            balloon.style.animationDelay = `${delay}s`;
+            
+            // Random animation duration (15-25 seconds)
+            const duration = 15 + Math.random() * 10;
+            balloon.style.animationDuration = `${duration}s`;
+            
+            // Random size variation
+            const sizeScale = 0.7 + Math.random() * 0.6;
+            balloon.style.transform = `scale(${sizeScale})`;
+            
+            // Add to page
+            document.body.appendChild(balloon);
+            
+            // Remove and recreate balloon after animation completes
+            setTimeout(() => {
+                if (balloon.parentNode && !isSunflowerMode) {
+                    balloon.parentNode.removeChild(balloon);
+                    // Remove from array
+                    const index = currentBalloons.indexOf(balloon);
+                    if (index > -1) currentBalloons.splice(index, 1);
+                    
+                    // Create a new balloon to maintain 101 count
+                    setTimeout(() => {
+                        const newBalloon = createBalloon(index, balloonEmojis, balloonColors);
+                        currentBalloons.push(newBalloon);
+                    }, Math.random() * 2000);
+                }
+            }, (duration + delay) * 1000);
+            
+            return balloon;
+        }
+        
+        // Create single sunflower
+        function createSunflower(index, sunflowerEmojis, sunflowerColors) {
+            const sunflower = document.createElement('div');
+            sunflower.classList.add('sunflower');
+            
+            // Random color class
+            const colorClass = sunflowerColors[Math.floor(Math.random() * sunflowerColors.length)];
+            
+            // Create sunflower
+            sunflower.innerHTML = `
+                <div class="sunflower-emoji ${colorClass}">${sunflowerEmojis[0]}</div>
+            `;
+            
+            // Random horizontal position
+            const leftPosition = Math.random() * 100;
+            sunflower.style.left = `${leftPosition}%`;
+            
+            // Random drift amount for side-to-side movement
+            const driftAmount = (Math.random() - 0.5) * 150;
+            sunflower.style.setProperty('--drift', `${driftAmount}px`);
+            
+            // Random delay for staggered animation
+            const delay = Math.random() * 5;
+            sunflower.style.animationDelay = `${delay}s`;
+            
+            // Random animation duration (18-30 seconds)
+            const duration = 18 + Math.random() * 12;
+            sunflower.style.animationDuration = `${duration}s`;
+            
+            // Random size variation
+            const sizeScale = 0.8 + Math.random() * 0.7;
+            sunflower.style.transform = `scale(${sizeScale})`;
+            
+            // Add to page
+            document.body.appendChild(sunflower);
+            
+            // Remove and recreate sunflower after animation completes
+            setTimeout(() => {
+                if (sunflower.parentNode && isSunflowerMode) {
+                    sunflower.parentNode.removeChild(sunflower);
+                    // Remove from array
+                    const index = currentBalloons.indexOf(sunflower);
+                    if (index > -1) currentBalloons.splice(index, 1);
+                    
+                    // Create a new sunflower to maintain 101 count
+                    setTimeout(() => {
+                        const newSunflower = createSunflower(index, sunflowerEmojis, sunflowerColors);
+                        currentBalloons.push(newSunflower);
+                    }, Math.random() * 1000);
+                }
+            }, (duration + delay) * 1000);
+            
+            return sunflower;
+        }
+        
+        // Clear all balloons/sunflowers
+        function clearAllBalloons() {
+            // Remove all existing balloons/sunflowers
+            const existingBalloons = document.querySelectorAll('.balloon, .sunflower');
+            existingBalloons.forEach(balloon => {
+                if (balloon.parentNode) {
+                    balloon.parentNode.removeChild(balloon);
+                }
+            });
+            
+            // Clear the array
+            currentBalloons = [];
+        }
+        
+        // Mobile-optimized snowflakes (reduced count for performance)
+        function createSnowflakes() {
+            const isMobile = window.innerWidth <= 768;
+            const snowflakeCount = isMobile ? 10 : 20; // Further reduced for sunflower performance
+            
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                
+                // Smaller snowflakes
+                const size = isMobile ? (Math.random() * 4 + 2) : (Math.random() * 5 + 3);
+                snowflake.style.width = `${size}px`;
+                snowflake.style.height = `${size}px`;
+                
+                // Random position
+                snowflake.style.left = `${Math.random() * 100}vw`;
+                snowflake.style.top = `${Math.random() * -20}vh`;
+                
+                // Random opacity
+                snowflake.style.opacity = Math.random() * 0.3 + 0.1;
+                
+                // Add to page
+                document.body.appendChild(snowflake);
+                
+                // Animate snowflake falling
+                animateSnowflake(snowflake, i);
+            }
+        }
+        
+        function animateSnowflake(snowflake, index) {
+            const isMobile = window.innerWidth <= 768;
+            const duration = isMobile ? (Math.random() * 25 + 20) : (Math.random() * 30 + 25);
+            const horizontalDrift = (Math.random() - 0.5) * 60;
+            
+            // Use transform for better performance
+            snowflake.animate([
+                { 
+                    transform: `translate(0, 0) rotate(0deg)`,
+                    opacity: snowflake.style.opacity
+                },
+                { 
+                    transform: `translate(${horizontalDrift}px, 120vh) rotate(360deg)`,
+                    opacity: 0
+                }
+            ], {
+                duration: duration * 1000,
+                delay: Math.random() * 10000,
+                easing: 'linear',
+                iterations: Infinity
+            });
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            createSnowflakes();
+            create101Balloons(); // Start with 101 balloons
+            startColorShift();
+            
+            // Initialize music player
+            const music = document.getElementById('background-music');
+            const playPauseBtn = document.getElementById('play-pause-btn');
+            const volumeSlider = document.getElementById('volume-slider');
+            const volumeFill = document.getElementById('volume-fill');
+            const volumeKnob = document.getElementById('volume-knob');
+            
+            // Set initial volume to 30% (softer background music)
+            music.volume = 0.3;
+            volumeFill.style.width = '30%';
+            volumeKnob.style.left = '30%';
+            
+            // Play/pause button functionality
+            playPauseBtn.addEventListener('click', () => {
+                if (music.paused) {
+                    music.play().then(() => {
+                        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    }).catch(e => {
+                        console.log("Play failed:", e);
+                        // If autoplay is blocked, show a message
+                        playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    });
+                } else {
+                    music.pause();
+                    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                }
+            });
+            
+            // Auto-play music with user interaction
+            let musicStarted = false;
+            function startMusicOnInteraction() {
+                if (!musicStarted) {
+                    music.play().then(() => {
+                        musicStarted = true;
+                        playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    }).catch(e => {
+                        console.log("Autoplay prevented:", e);
+                        // Wait for user interaction
+                    });
+                    
+                    // Remove event listeners after first interaction
+                    document.removeEventListener('click', startMusicOnInteraction);
+                    document.removeEventListener('touchstart', startMusicOnInteraction);
+                }
+            }
+            
+            // Start music on first user interaction
+            document.addEventListener('click', startMusicOnInteraction);
+            document.addEventListener('touchstart', startMusicOnInteraction);
+            
+            // Volume slider functionality
+            let isDragging = false;
+            
+            function updateVolume(clientX) {
+                const rect = volumeSlider.getBoundingClientRect();
+                let percentage = (clientX - rect.left) / rect.width;
+                percentage = Math.max(0, Math.min(1, percentage));
+                
+                music.volume = percentage;
+                volumeFill.style.width = `${percentage * 100}%`;
+                volumeKnob.style.left = `${percentage * 100}%`;
+            }
+            
+            volumeSlider.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                updateVolume(e.clientX);
+                e.preventDefault();
+            });
+            
+            volumeKnob.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                e.stopPropagation();
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    updateVolume(e.clientX);
+                }
+            });
+            
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+            
+            // Touch events for mobile
+            volumeSlider.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                updateVolume(e.touches[0].clientX);
+                e.preventDefault();
+            });
+            
+            document.addEventListener('touchmove', (e) => {
+                if (isDragging) {
+                    updateVolume(e.touches[0].clientX);
+                    e.preventDefault();
+                }
+            });
+            
+            document.addEventListener('touchend', () => {
+                isDragging = false;
+            });
+            
+            // Get elements
+            const yesBtn = document.getElementById('yes-btn');
+            const noBtn = document.getElementById('no-btn');
+            const questionContainer = document.getElementById('question-container');
+            const successContainer = document.getElementById('success-container');
+            const buttonsWrapper = document.querySelector('.buttons-wrapper');
+            
+            // Ensure yes button text is always white
+            yesBtn.style.color = 'white';
+            
+            // Track the current button text and state
+            let buttonStage = 0;
+            const buttonStages = [
+                { text: "No", class: "no-btn no-select" },
+                { text: "Really?", class: "no-btn no-select" },
+                { text: "Think again", class: "no-btn no-select" },
+                { text: "Don't do this", class: "no-btn no-select" },
+                { text: "Give me a chance", class: "no-btn no-select" }
+            ];
+            
+            // Function to get random left/right position
+            function getRandomLeftRightPosition() {
+                const wrapperRect = buttonsWrapper.getBoundingClientRect();
+                const buttonRect = noBtn.getBoundingClientRect();
+                
+                // Calculate available space
+                const maxX = wrapperRect.width - buttonRect.width - 20;
+                
+                // Choose either left or right side randomly
+                const isLeftSide = Math.random() > 0.5;
+                
+                // Position: either near left edge or right edge
+                let randomX;
+                if (isLeftSide) {
+                    randomX = Math.random() * (maxX * 0.3); // Left 30% of space
+                } else {
+                    randomX = (maxX * 0.7) + Math.random() * (maxX * 0.3); // Right 30% of space
+                }
+                
+                // Random vertical position (avoiding very top and bottom)
+                const maxY = wrapperRect.height - buttonRect.height - 20;
+                const randomY = 20 + Math.random() * (maxY - 40);
+                
+                return {
+                    x: Math.max(10, Math.min(maxX + 10, randomX)),
+                    y: Math.max(10, Math.min(maxY + 10, randomY))
+                };
+            }
+            
+            // Yes button click handler
+            const handleYesClick = () => {
+                // Remove pulse animation
+                yesBtn.style.animation = 'none';
+                
+                // Change container background to very light pink
+                questionContainer.style.background = "linear-gradient(145deg, rgba(255, 245, 250, 0.98), rgba(255, 235, 240, 0.95))";
+                
+                // Change page background to golden gradient for sunflowers
+                document.body.style.background = "linear-gradient(135deg, #FFF8DC, #FFE4B5, #FFD700, #FFA500)";
+                document.body.style.animation = "none";
+                document.body.classList.remove('color-shift');
+                
+                // Change all balloons to 101 sunflowers!
+                create101Sunflowers();
+                
+                // Hide question container and show success container
+                questionContainer.style.display = "none";
+                successContainer.style.display = "block";
+                
+                // Change title for success
+                document.title = "Yay! She said YES!";
+                
+                // Add a subtle confetti effect
+                createConfetti();
+                
+                // Increase music volume for celebration
+                music.volume = 0.6;
+                volumeFill.style.width = '60%';
+                volumeKnob.style.left = '60%';
+            };
+            
+            // Add both click and touch events for better mobile support
+            yesBtn.addEventListener('click', handleYesClick);
+            yesBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                handleYesClick();
+            });
+            
+            // No button click handler with random left/right teleportation
+            const handleNoClick = (e) => {
+                e.preventDefault();
+                
+                // Teleport effect on button
+                noBtn.classList.add('teleport');
+                
+                // Change background color temporarily
+                const originalBackground = document.body.style.background;
+                document.body.style.background = "linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #ff9a9e)";
+                document.body.style.transition = 'background 0.5s ease';
+                
+                // Get a random left/right position
+                const newPosition = getRandomLeftRightPosition();
+                
+                // Set new position with smooth transition
+                noBtn.style.left = `${newPosition.x}px`;
+                noBtn.style.top = `${newPosition.y}px`;
+                
+                // Change button text based on stage
+                if (buttonStage < buttonStages.length - 1) {
+                    buttonStage++;
+                    noBtn.textContent = buttonStages[buttonStage].text;
+                    noBtn.className = `no-btn no-select`;
+                } else {
+                    // If it's the last stage, go back to the first
+                    buttonStage = 0;
+                    noBtn.textContent = buttonStages[buttonStage].text;
+                    noBtn.className = `no-btn no-select`;
+                }
+                
+                // Make yes button slightly larger to encourage clicking
+                yesBtn.style.transform = "scale(1.12)";
+                
+                // Reset teleport animation after delay
+                setTimeout(() => {
+                    noBtn.classList.remove('teleport');
+                    // Return to original background
+                    document.body.style.background = originalBackground;
+                    yesBtn.style.transform = "scale(1)";
+                }, 400);
+                
+                // Haptic feedback on supported devices
+                if (navigator.vibrate) {
+                    navigator.vibrate([30]);
+                }
+            };
+            
+            // Add both click and touch events for no button
+            noBtn.addEventListener('click', handleNoClick);
+            noBtn.addEventListener('touchend', handleNoClick);
+            
+            // Create simple confetti for mobile
+            function createConfetti() {
+                const confettiCount = 80;
+                const colors = ['#FFD700', '#FFA500', '#FF8C00', '#FF6347', '#FF4500'];
+                
+                for (let i = 0; i < confettiCount; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.style.position = 'fixed';
+                    confetti.style.width = '12px';
+                    confetti.style.height = '12px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.borderRadius = '50%';
+                    confetti.style.left = `${Math.random() * 100}vw`;
+                    confetti.style.top = '-10px';
+                    confetti.style.zIndex = '5';
+                    confetti.style.opacity = '0.9';
+                    
+                    document.body.appendChild(confetti);
+                    
+                    // Animate confetti falling
+                    const animation = confetti.animate([
+                        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                        { transform: `translateY(100vh) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                    ], {
+                        duration: 1500 + Math.random() * 2000,
+                        easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+                    });
+                    
+                    // Remove confetti after animation
+                    animation.onfinish = () => {
+                        confetti.remove();
+                    };
+                }
+            }
+            
+            // Handle window resize - reset button positions
+            window.addEventListener('resize', () => {
+                // Reset no button to random position
+                const newPosition = getRandomLeftRightPosition();
+                noBtn.style.left = `${newPosition.x}px`;
+                noBtn.style.top = `${newPosition.y}px`;
+            });
+            
+            // Prevent context menu on buttons for mobile
+            noBtn.addEventListener('contextmenu', (e) => e.preventDefault());
+            
+            // Improve performance by reducing animations when page is not visible
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    document.body.style.animationPlayState = 'paused';
+                    music.pause();
+                    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                } else {
+                    document.body.style.animationPlayState = 'running';
+                }
+            });
+            
+            // Initial button positioning - random left/right
+            setTimeout(() => {
+                const newPosition = getRandomLeftRightPosition();
+                noBtn.style.left = `${newPosition.x}px`;
+                noBtn.style.top = `${newPosition.y}px`;
+            }, 100);
+        });
+        
+        // Prevent zoom on double-tap for iOS
+        document.addEventListener('dblclick', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+        
+        // Prevent pull-to-refresh on mobile
+        document.addEventListener('touchmove', function(e) {
+            if (e.scale !== 1) e.preventDefault();
+        }, { passive: false });
+        
+        // Ensure buttons stay within bounds on orientation change
+        window.addEventListener('orientationchange', function() {
+            setTimeout(() => {
+                const noBtn = document.getElementById('no-btn');
+                if (noBtn) {
+                    // Recalculate random position
+                    const buttonsWrapper = document.querySelector('.buttons-wrapper');
+                    const wrapperRect = buttonsWrapper.getBoundingClientRect();
+                    const buttonRect = noBtn.getBoundingClientRect();
+                    
+                    const maxX = wrapperRect.width - buttonRect.width - 20;
+                    const isLeftSide = Math.random() > 0.5;
+                    let randomX;
+                    
+                    if (isLeftSide) {
+                        randomX = Math.random() * (maxX * 0.3);
+                    } else {
+                        randomX = (maxX * 0.7) + Math.random() * (maxX * 0.3);
+                    }
+                    
+                    const maxY = wrapperRect.height - buttonRect.height - 20;
+                    const randomY = 20 + Math.random() * (maxY - 40);
+                    
+                    noBtn.style.left = `${Math.max(10, Math.min(maxX + 10, randomX))}px`;
+                    noBtn.style.top = `${Math.max(10, Math.min(maxY + 10, randomY))}px`;
+                }
+            }, 300);
+        });
+    </script>
+</body>
+</html>
